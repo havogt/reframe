@@ -408,7 +408,7 @@ class ProgEnvironment(Environment):
             # if self.ldflags is not None:
             #     flags.append("LDFLAGS='%s'" % self.ldflags)
 
-            cmd = ' '.join(flags) + ' ' +
+            cmd = ' '.join(flags) + ' ' + cmd
 
         print( 'cmd: %s', cmd )
 
