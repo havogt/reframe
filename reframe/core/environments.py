@@ -337,7 +337,7 @@ class ProgEnvironment(Environment):
                                    stderr=e.stderr,
                                    exitcode=e.exitcode,
                                    environ=self)
-
+'''
     def _compile_dir(self, source_dir, makefile, options):
         if makefile:
             cmd = 'make -C %s -f %s %s ' % (source_dir, makefile, options)
@@ -377,3 +377,52 @@ class ProgEnvironment(Environment):
                                    stderr=e.stderr,
                                    exitcode=e.exitcode,
                                    environ=self)
+'''
+
+
+def _compile_dir(self, source_dir, makefile, options):
+    cmd = 'cmake %s ' % (source_dir)
+    # cmd = 'cmake %s %s ' % (source_dir, options) (check options)
+
+    # Pass a set of predefined options to the Makefile
+    if self.propagate:
+        flags = ["CC='%s'" % self.cc,
+                 "CXX='%s'" % self.cxx,
+                 "FC='%s'" % self.ftn]
+
+        # Explicitly check against None here; the user may explicitly want
+        # to clear the flags
+        # if self.cppflags is not None:
+        #     flags.append("CPPFLAGS='%s'" % self.cppflags)
+        #
+        # if self.cflags is not None:
+        #     flags.append("CFLAGS='%s'" % self.cflags)
+        #
+        # if self.cxxflags is not None:
+        #     flags.append("CXXFLAGS='%s'" % self.cxxflags)
+        #
+        # if self.fflags is not None:
+        #     flags.append("FFLAGS='%s'" % self.fflags)
+        #
+        # if self.ldflags is not None:
+        #     flags.append("LDFLAGS='%s'" % self.ldflags)
+
+        cmd = ' '.join(flags) + ' ' + cmd
+
+    try:
+        return os_ext.run_command(cmd, check=True)
+    except CommandError as e:
+        raise CompilationError(command=e.command,
+                               stdout=e.stdout,
+                               stderr=e.stderr,
+                               exitcode=e.exitcode,
+                               environ=self)
+    cmd = 'make -C %s ' % (source_dir)
+    try:
+        return os_ext.run_command(cmd, check=True)
+    except CommandError as e:
+        raise CompilationError(command=e.command,
+                               stdout=e.stdout,
+                               stderr=e.stderr,
+                               exitcode=e.exitcode,
+                               environ=self)
