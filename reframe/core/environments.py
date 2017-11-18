@@ -287,7 +287,9 @@ class ProgEnvironment(Environment):
     def compile(self, sourcepath, makefile=None, executable=None,
                 lang=None, options=''):
 
-        if os.path.isdir(sourcepath):
+        if not os.path.exists():
+            raise ReframeError('Path/file does not exist.')
+        elif os.path.isdir(sourcepath):
             return self._compile_dir(sourcepath, makefile, options)
         else:
             return self._compile_file(sourcepath, executable, lang, options)
