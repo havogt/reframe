@@ -408,7 +408,9 @@ class ProgEnvironment(Environment):
             # if self.ldflags is not None:
             #     flags.append("LDFLAGS='%s'" % self.ldflags)
 
-            cmd = ' '.join(flags) + ' ' + cmd
+            cmd = ' '.join(flags) + ' ' +
+
+        print( 'cmd: %s', cmd )
 
         try:
             return os_ext.run_command(cmd, check=True)
