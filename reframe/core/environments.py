@@ -387,9 +387,9 @@ class ProgEnvironment(Environment):
 
         # Pass a set of predefined options to the Makefile
         if self.propagate:
-            flags = ["CC='%s'" % self.cc,
-                     "CXX='%s'" % self.cxx,
-                     "FC='%s'" % self.ftn]
+            flags = ["-DCMAKE_C_COMPILER='%s'" % self.cc,
+                     "-DCMAKE_CXX_COMPILER='%s'" % self.cxx,
+                     "-DCMAKE_FORTRAN_COMPILER='%s'" % self.ftn]
 
             # Explicitly check against None here; the user may explicitly want
             # to clear the flags
@@ -408,9 +408,9 @@ class ProgEnvironment(Environment):
             # if self.ldflags is not None:
             #     flags.append("LDFLAGS='%s'" % self.ldflags)
 
-            cmd = ' '.join(flags) + ' ' + cmd
+            cmd += ' '.join(flags)
 
-        print( 'cmd: %s', cmd )
+        print('cmd: ', cmd)
 
         try:
             return os_ext.run_command(cmd, check=True)
