@@ -382,6 +382,15 @@ class ProgEnvironment(Environment):
 
 
     def _compile_dir(self, source_dir, makefile, options):
+        build_dir = source_dir+"/build"
+
+        try:
+            os.stat(build_dir)
+        except:
+            os.mkdir(build_dir)
+
+        os.chdir(build_dir)
+
         cmd = 'cmake %s ' % (source_dir)
         # cmd = 'cmake %s %s ' % (source_dir, options) (check options)
 
@@ -420,7 +429,7 @@ class ProgEnvironment(Environment):
                                    stderr=e.stderr,
                                    exitcode=e.exitcode,
                                    environ=self)
-        cmd = 'make -C %s ' % (source_dir)
+        cmd = 'make -C %s ' % (build_dir)
         try:
             return os_ext.run_command(cmd, check=True)
         except CommandError as e:
